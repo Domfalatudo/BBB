@@ -1,92 +1,111 @@
 import random
+import time
+import threading
 
+    # ----------- COMEÇO DO BBB -----------
 
+player = input("Quer jogar?? S ou N??\n").strip().lower()
 
-player = input("Quer jogar?? S ou N??\n")
-
-import random
-
-if player == "s":
+if player != "s":
     print("Ok vaza então\n")
-else:
-    player == "s"
-    print("Let's bora:\n")
-    print("Primeiro irei te explicar as regras do jogo:\n ")
-    print("Primeiro você precisa dar nome a 24 personagens e apenas ler e se divertir quanto mais idiotas melhor\n")
-    import random
+    exit()
 
-    nome1 = input("1º personagem:\n")
-    nome2 = input("2º personagem:\n")
-    nome3 = input("3º personagem:\n")
-    nome4 = input("4º personagem:\n")
-    nome5 = input("5º personagem:\n")
-    nome6 = input("6º personagem:\n")
-    nome7 = input("7º personagem:\n")
-    nome8 = input("8º personagem:\n")
-    nome9 = input("9º personagem:\n")
-    nome10 = input("10º personagem:\n")
-    nome11 = input("11º personagem:\n")
-    nome12 = input("12º personagem:\n")
-    nome13 = input("13º personagem:\n")
-    nome14 = input("14º personagem:\n")
-    nome15 = input("15º personagem:\n")
-    nome16 = input("16º personagem:\n")
-    nome17 = input("17º personagem:\n")
-    nome18 = input("18º personagem:\n")
-    nome19 = input("19º personagem:\n")
-    nome20 = input("20º personagem:\n")
-    nome21 = input("21º personagem:\n")
-    nome22 = input("22º personagem:\n")
-    nome23 = input("23º personagem:\n")
-    nome24 = input("24º personagem:\n")
+print("Let's bora:\n")
+print("Primeiro irei te explicar as regras do jogo:\n ")
+print("Você precisa dar nome a 24 personagens. Quanto mais idiotas, melhor!\n")
 
-
-    nomes = [
-    nome1, nome2, nome3, nome4, nome5, nome6, nome7, nome8,
-    nome9, nome10, nome11, nome12, nome13, nome14, nome15,
-    nome16, nome17, nome18, nome19, nome20, nome21, nome22,
-    nome23, nome24
+    # ----------- NOMES PARA FACILITAR OS TESTES -----------
+nomes = [
+    "Bruno", "Camila", "João", "Larissa", "Mateus", "Juliana",
+    "Pedro", "Vanessa", "Lucas", "Tatiane", "Rafael", "Bianca",
+    "Henrique", "Patrícia", "Gustavo", "Fernanda", "Tiago", "Carol",
+    "Daniel", "Isabela", "Marcos", "Aline", "Eduardo", "Natália"
 ]
 
-    import random
-    primeiro = random.choice(nomes)
-    segundo = random.choice(nomes)
-    terceiro = segundo
-    quarto = primeiro
+    # ----------- COLETA DE NOMES -----------
+#nomes = []
+#for i in range(1, 25):
+        #nome = input(f"{i}º personagem:\n")
+       # nomes.append(nome)
+    # ----------- COLETA DE NOMES -----------
 
-    lista = [
-        nome1, nome2, nome3, nome4, nome5, nome6,
-        nome7, nome8, nome9, nome10, nome11, nome12,
-        nome13, nome14, nome15, nome16, nome17, nome18,
-        nome19, nome20, nome21, nome22, nome23, nome24
-    ]
+print("\nTodos entram na casa do BBB...\n")
 
-    sorteado = random.choice(lista)
 
-    print("Let's Bora\n")
 
-    print("Todos entram na casa do BBB:\n  ")
+    # ----------- CÓDIGO PARA NÃO REPETIR OS NOMES -----------
 
-    import random
+for _ in range(5):  # ----------- EXIBE 5 MENSAGENS ALEATÓRIAS -----------
+    selecionados = random.sample(nomes, 4)
+    primeiro, segundo, terceiro, quarto = selecionados
+    restante = [nome for nome in nomes if nome not in selecionados]
+    sorteado = random.choice(restante) if restante else random.choice(nomes)
 
-    mensagens = [
-        f"{sorteado} já le tasca um beijão em {sorteado}, a câmera pega e todo o público fica sabendo — plot twist que ninguém pediu.",
-        f"{primeiro} falou que ama {segundo}, mas {terceiro} era transgênero e {quarto} cai em depressão profunda, porque assim é o BBB: drama nonstop.",
-        f"{primeiro} deu um 'corno, mas faz parte' pra {segundo} no meio da festa, e {quarto} já começou a chamar todo mundo de falso.",
-        f"{segundo} jurando que tá apaixonado, mas a gente sabe que é só jogo e que {quarto} já tá no próximo rolê.",
-        f"{terceiro} e {quarto} tretando por causa de um crush, enquanto {primeiro} só quer paz, amor e cerveja.",
-        f"{sorteado} soltou a real: 'No BBB, amor é combustível, mas fofoca é gasolina na fogueira'.",
-        f"{primeiro} disse que vai sair da casa com a cabeça erguida, mas a câmera já sabe que é mentira e que a treta vai até o final.",
-        f"{segundo} mandou aquele shade digno, e {terceiro} respondeu com um 'só lamento, miga'.",
-        f"{quarto} tentou bancar o amigo, mas na real já tá planejando a revanche no próximo paredão.",
-        f"{sorteado} chegou chegando, causando confusão e deixando a casa inteira com um 'quem vê, não crê'.",
-    ]
-    
-    Msg = 1
-    while Msg < 5: 
-        print(random.choice(mensagens))
-        Msg += 1
+    # ----------- MENSAGENS -----------
 
+    mensagens_base = [
+        ("{0} já le tasca um beijão em {1}, a câmera pega e todo o público fica sabendo — plot twist que ninguém pediu.", 2),
+        ("{0} falou que ama {1}, mas {1} era transgênero e {0} cai em depressão profunda, porque assim é o BBB: drama nonstop.", 2),
+        ("{0} deu um 'corno, mas faz parte' pra {1} no meio da festa, e {1} já começou a chamar todo mundo de falso.", 2),
+        ("{0} jurando que tá apaixonado, mas a gente sabe que é só jogo e que {1} já tá no próximo rolê.", 2),
+        ("{0} e {1} tretando por causa de um crush, enquanto {2} só quer paz, amor e cerveja.", 3),
+        ("{0} soltou a real: 'No BBB, amor é combustível, mas fofoca é gasolina na fogueira'.", 1),
+        ("{0} disse que vai sair da casa com a cabeça erguida, mas a câmera já sabe que é mentira e que a treta vai até o final.", 1),
+        ("{0} mandou aquele shade digno, e {1} respondeu com um 'só lamento, miga'.", 2),
+        ("{0} tentou bancar o amigo, mas na real já tá planejando a revanche no próximo paredão.", 1),
+        ("{0} chegou causando confusão e deixando a casa inteira com um 'quem vê, não crê'.", 1),
+        ("{0} e {1} sumiram do quarto por horas, quando voltaram, {2} já tava surtando com ciúmes.", 3),
+        ("{0} pegou {1} no flagra com {2} embaixo do edredom. Disfarçaram? Nem tentaram. A treta foi servida ao vivo.", 3),
+        ("{0} tentou um clima com {1}, mas levou um 'você é só meu contatinho de paredão'. A vergonha foi nacional.", 2),
+        ("{0} tentou fazer as pazes com {1}, mas levou um banho de bebida na cara no meio da festa.", 2),
+        ("{0} foi falar mal de {1} no quarto, mas o microfone tava ligado direto na sala. Gafe histórica.", 2),
+        ("{0} fez juras de amor para {1}, mas à noite tava na piscina com {2} dizendo 'você que é meu crush real'.", 3)
+]
+
+    # ----------- MENSAGENS -----------
+
+    # ----------- FUNCIONAMENTO DA LISTA DE MENSAGENS -----------
+
+    random.shuffle(mensagens_base)
+mensagem_index = 0
+
+def esperar_input(flag):
+    input("[Aperte Enter para a próxima ou espere...]\n")
+    flag.append(True)
+
+for _ in range(5):
+    if mensagem_index >= len(mensagens_base):
+        print("Acabaram as fofocas por hoje. 👀")
+        break
+
+    template, qtd_nomes = mensagens_base[mensagem_index]
+    mensagem_index += 1
+
+    # Pega somente a quantidade necessária de nomes, sem repetição
+    personagens = random.sample(nomes, qtd_nomes)
+
+    # Formata a mensagem com os nomes certos
+    mensagem = template.format(*personagens)
+
+    print(mensagem)
+
+    # Delay com possibilidade de pulo
+    delay_flag = []
+    thread = threading.Thread(target=esperar_input, args=(delay_flag,))
+    thread.start()
+
+    base_delay = 20
+    extra_delay = max(0, len(mensagem) - 200) // 20
+    total_delay = base_delay + extra_delay
+
+    for _ in range(total_delay):
+        if delay_flag:
+            break
+        time.sleep(1)
+
+    print()
+
+        # ----------- FUNCIONAMENTO DA LISTA DE MENSAGENS -----------
 
     
 
