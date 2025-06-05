@@ -1,6 +1,7 @@
 import random
 import time
 import threading
+import matplotlib.pyplot as plt
 
     # ----------- COMEÇO DO BBB -----------
 
@@ -59,7 +60,48 @@ for _ in range(5):  # ----------- EXIBE 5 MENSAGENS ALEATÓRIAS -----------
         ("{0} tentou um clima com {1}, mas levou um 'você é só meu contatinho de paredão'. A vergonha foi nacional.", 2),
         ("{0} tentou fazer as pazes com {1}, mas levou um banho de bebida na cara no meio da festa.", 2),
         ("{0} foi falar mal de {1} no quarto, mas o microfone tava ligado direto na sala. Gafe histórica.", 2),
-        ("{0} fez juras de amor para {1}, mas à noite tava na piscina com {2} dizendo 'você que é meu crush real'.", 3)
+        ("{0} pegou {1} fumando escondido no banheiro, mas acabou dando uns tragos também, porque limites aqui não existem.", 2),
+        ("{0} e {1} foram pegos transando no confessionário, enquanto {2} tava na sala falando que nunca faria isso ao vivo.", 3),
+        ("{0} meteu o louco: beijou {1}, pegou {2} na mesma festa e ainda terminou a noite chorando na sauna.", 3),
+        ("{0} e {1} tretaram feio: gritaria, dedo na cara e muita baixaria até segurança intervir.", 2),
+        ("{0} abriu a geladeira de madrugada, achou bebida e chamou {1} pra virar tudo na jacuzzi. Resultado? Só acordaram ao meio-dia, pelados.", 2),
+        ("{0} e {1} deram um amasso tão forte no sofá que derrubaram o vaso e quebraram a mesa. Clássico BBB.", 2),
+        ("{0} puxou {1} pro edredom, mas {1} já tava tão doidão que dormiu no meio da pegação.", 2),
+        ("{0} começou a flertar com {1}, mas {2} viu e já tacou bebida na cara, berrando: 'respeita minha história!'", 3),
+        ("{0} foi pego pelado na cozinha fazendo miojo às 4 da manhã, enquanto {1} e {2} fumavam no sofá e riam da cena.", 3),
+        ("{0} surtou de ciúmes quando viu {1} dando uns pegas em {2} na festa, tacou copo no chão e gritou: 'traidor!'", 3),
+        ("{0} e {1} se pegaram tão forte na festa que até a produção ficou sem saber se cortava ou deixava rolar.", 2),
+        ("{0} se declarou pra {1} depois de virar cinco shots, mas tropeçou e caiu no colo de {2}. Romance e vergonha misturados.", 3),
+        ("{0} tava tão bêbado que começou a dançar pelado na área externa, enquanto {1} filmava tudo e {2} só ria: 'isso vai pro VT!'", 3),
+        ("{0} saiu no tapa com {1} depois de descobrir que {1} tava pegando {2} escondido. O barraco parou a casa toda.", 3),
+        ("{0} e {1} juraram que era só amizade, mas ontem foram vistos transando na despensa. Falso moralismo? Sempre.", 2),
+        ("{0} e {1} fumaram tanta maconha na área externa que ficaram rindo sozinhos por duas horas, enquanto {2} surtava com o caos.", 3),
+        ("{0} tentou fazer a fina, mas depois do quinto drink já tava rebolando até o chão com {1} e passando vergonha nacional.", 2),
+        ("{0} ficou puto ao ver {1} lambendo o pescoço de {2} na festa. Partiu pra agressão e foi chamado no confessionário.", 3),
+        ("{0} acordou de ressaca e jurou que nunca mais ia beber… até a próxima festa com {1}, claro.", 2),
+        ("{0} perdeu a linha: subiu na mesa da cozinha pelado e começou a gritar que {1} era o amor da vida dele, enquanto {2} vomitava no canto.", 3),
+        ("{0} se escondeu no armário pra ouvir a fofoca de {1}, mas espirrou bem na hora e foi pego no flagra, causando uma gritaria generalizada.", 2),
+        ("{0} se declarou pra {1} ao vivo, mas acabou levando um fora histórico: 'Você é só mais um contatinho de festa, relaxa!'", 2),
+        ("{0} ficou tão louco de cachaça que tentou beijar o dummy achando que era {1}. O Brasil inteiro riu com vergonha alheia.", 2),
+        ("{0} e {1} inventaram de fazer strip-tease na varanda, mas escorregaram e caíram juntos na piscina. Cenas lamentáveis.", 2),
+        ("{0} tacou fogo no parquinho: pegou a garrafa de vodka e saiu oferecendo shot pra geral, até que {1} desmaiou no sofá.", 2),
+        ("{0} foi tentar fazer uma DR séria com {1}, mas tava tão chapado que esqueceu o assunto no meio da frase.", 2),
+        ("{0} tentou se esconder de {1} depois da treta, mas tropeçou, caiu no chão e ainda levou uma zoada: 'Foge não, covarde!'", 2),
+        ("{0} não aguentou a pressão: surtou na academia, chutou os aparelhos e ainda gritou que ia meter o soco no próximo que olhasse torto.", 1),
+        ("{0} jurou que não pegava mais ninguém, mas cinco minutos depois já tava de língua com {1} na despensa, enquanto {2} filmava tudo.", 3),
+        ("{0} invadiu o quarto gritando que {1} era falso, acordou geral e ainda ameaçou jogar as roupas de todo mundo na piscina.", 2),
+        ("{0} e {1} se esconderam na casinha do jardim pra dar uns amassos, mas foram flagrados por {2}, que soltou: 'Só assim pra aparecer no VT!'", 3),
+        ("{0} tentou provocar {1} na festa, mas levou um tapão na cara e ficou todo mundo gritando: 'É barraco!'", 2),
+        ("{0} falou que não se mete em briga, mas ontem puxou {1} pelos cabelos na área externa e só parou quando {2} separou.", 3),
+        ("{0} resolveu dar uma de romântico e levou café na cama pra {1}, mas acabou derrubando tudo e queimando a perna dela. Clima arruinado.", 2),
+        ("{0} foi pro paredão e, ao invés de discurso, mandou um 'foda-se vocês', virou um shot e saiu pelado correndo pela casa.", 1),
+        ("{0} tentou fazer charme pra {1}, mas errou o degrau e caiu de cara na escada. A galera não perdoou e virou meme na hora.", 2),
+        ("{0} ficou tão louco na festa que começou a fazer pole dance no mastro da varanda, enquanto {1} e {2} só filmavam rindo.", 3),
+        ("{0} disse que era o mais sensato da casa, mas ontem foi visto pelado, fumando um baseado e dando em cima de {1} e {2} ao mesmo tempo.", 3),
+        ("{0} prometeu que não ia mais tretar, mas bastou {1} olhar torto que já tava partindo pra cima e quebrando o copo na parede.", 2),
+        ("{0} fez juras de amor para {1}, mas à noite tava na piscina com {2} dizendo 'você que é meu crush real'.", 3),
+        ("{0} deu PT na festa, vomitou na piscina e ainda tentou beijar {1}, que fugiu rindo: 'sóbrio, nunca!'", 2),
+
 ]
 
     # ----------- MENSAGENS -----------
@@ -106,12 +148,53 @@ for _ in range(5):
     print()
 
         # ----------- FUNCIONAMENTO DA LISTA DE MENSAGENS -----------
+        
+        # ----------- PAREDÃO -----------
 
-    
+    print("🚨🚨🚨 CHEGOU O MOMENTO DO PAREDÃO! 🚨🚨🚨\n")
 
+    # Sorteia 3 para o paredão
+    paredao = random.sample(nomes, 3)
+    print(f"Emparedados da semana: {paredao[0]}, {paredao[1]} e {paredao[2]}!\n")
 
+    # Dicionário para votos
+    votos = {participante: 0 for participante in paredao}
 
+    # Votação automática
+    total_votantes = len(nomes) - len(paredao)  # Não votam em si mesmos
 
+    for _ in range(total_votantes):
+        voto = random.choice(paredao)
+        votos[voto] += 1
 
-    
-    
+    # Exibe resultado
+    print("RESULTADO DO PAREDÃO:\n")
+    for participante, num_votos in votos.items():
+        print(f"{participante}: {num_votos} votos")
+
+            # Dados para o gráfico
+    participantes = list(votos.keys())
+    quantidade_votos = list(votos.values())
+
+    # Criando o gráfico de barras
+    plt.figure(figsize=(8, 6))
+    plt.bar(participantes, quantidade_votos, color=['red', 'blue', 'green'])
+
+    # Título e rótulos
+    plt.title('Resultado do Paredão - BBB')
+    plt.xlabel('Participantes')
+    plt.ylabel('Número de Votos')
+
+    # Mostrar os valores no topo de cada barra
+    for i, v in enumerate(quantidade_votos):
+        plt.text(i, v + 0.5, str(v), ha='center', fontweight='bold')
+
+    # Exibir o gráfico
+    plt.show()
+
+    # Determina eliminado
+    eliminado = max(votos, key=votos.get)
+
+    print(f"\n❌ O eliminado da semana é: {eliminado.upper()} com {votos[eliminado]} votos! ❌\n")
+    print("FIM DO JOGO! Até a próxima semana no BBB. 👀🔥")
+    nomes.remove(eliminado)
