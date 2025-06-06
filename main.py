@@ -3,6 +3,7 @@ import time
 import threading
 import matplotlib.pyplot as plt
 
+
     # ----------- COMEÇO DO BBB -----------
 
 player = input("Quer jogar?? S ou N??\n").strip().lower()
@@ -15,29 +16,30 @@ print("Let's bora:\n")
 print("Primeiro irei te explicar as regras do jogo:\n ")
 print("Você precisa dar nome a 24 personagens. Quanto mais idiotas, melhor!\n")
 
-    # ----------- NOMES PARA FACILITAR OS TESTES -----------
+     #----------- NOMES PARA FACILITAR OS TESTES -----------
 nomes = [
-    "Bruno", "Camila", "João", "Larissa", "Mateus", "Juliana",
-    "Pedro", "Vanessa", "Lucas", "Tatiane", "Rafael", "Bianca",
-    "Henrique", "Patrícia", "Gustavo", "Fernanda", "Tiago", "Carol",
-    "Daniel", "Isabela", "Marcos", "Aline", "Eduardo", "Natália"
+    "Bruno", "Camila", "João"
 ]
+
+lider = None
+imune = None
+perde_voto = None
+
+round_number = 1
 
     # ----------- COLETA DE NOMES -----------
 #nomes = []
 #for i in range(1, 25):
         #nome = input(f"{i}º personagem:\n")
-       # nomes.append(nome)
-    # ----------- COLETA DE NOMES -----------
+        #nomes.append(nome)
 
-print("\nTodos entram na casa do BBB...\n")
-
-
+#print("\nTodos entram na casa do BBB...\n")
 
     # ----------- CÓDIGO PARA NÃO REPETIR OS NOMES -----------
 
 for _ in range(5):  # ----------- EXIBE 5 MENSAGENS ALEATÓRIAS -----------
-    selecionados = random.sample(nomes, 4)
+    selecionados = random.sample(nomes, min(4, len(nomes)))
+    selecionados += [None] * (4 - len(selecionados))
     primeiro, segundo, terceiro, quarto = selecionados
     restante = [nome for nome in nomes if nome not in selecionados]
     sorteado = random.choice(restante) if restante else random.choice(nomes)
@@ -104,7 +106,6 @@ for _ in range(5):  # ----------- EXIBE 5 MENSAGENS ALEATÓRIAS -----------
 
 ]
 
-    # ----------- MENSAGENS -----------
 
     # ----------- FUNCIONAMENTO DA LISTA DE MENSAGENS -----------
 
@@ -148,53 +149,136 @@ for _ in range(5):
     print()
 
         # ----------- FUNCIONAMENTO DA LISTA DE MENSAGENS -----------
+
+# ----------- PROVAS E EVENTOS ANTES DO PAREDÃO -----------
+
+print("\n🏆 Agora, começam as provas! 🏆\n")
+
+print("\n🏆 PROVA DO LÍDER! 🏆\n")
+input("Pressione Enter para saber quem ganhou...\n")
+lider = random.choice(nomes)
+print(f"👑 {lider} venceu a Prova do Líder e está imune!\n")
+
+input("Pressione Enter para a próxima prova...\n")
+
+print("\n😇 PROVA DO ANJO! 😇\n")
+input("Pressione Enter para saber quem ganhou...\n")
+anjo = random.choice([p for p in nomes if p != lider])
+print(f"😇 {anjo} venceu a Prova do Anjo!\n")
+
+input("Pressione Enter para saber quem o Anjo imunizou...\n")
+
+# Lista de possíveis imunizados: todo mundo menos o Anjo
+possiveis_imunizados = [p for p in nomes if p != anjo and p != lider]
+imune = random.choice(possiveis_imunizados)
+
+print(f"🛡️ {anjo} escolheu imunizar {imune}!\n")
+
+input("Pressione Enter para a última prova...\n")
+
+print("\n🚫 PROVA DA PERDA DE VOTO! 🚫\n")
+input("Pressione Enter para saber quem perdeu o direito de votar...\n")
+perde_voto = random.choice([p for p in nomes if p != lider and p != imune])
+print(f"🚫 {perde_voto} perdeu o direito de votar nesta semana.\n")
+
+input("Pressione Enter para seguir para o PAREDÃO...\n")
         
-        # ----------- PAREDÃO -----------
+# ----------- PAREDÃO -----------
 
-    print("🚨🚨🚨 CHEGOU O MOMENTO DO PAREDÃO! 🚨🚨🚨\n")
+print("🚨🚨🚨 CHEGOU O MOMENTO DO PAREDÃO! 🚨🚨🚨\n")
 
+# Participantes que podem ir para o paredão (exclui líder e imune)
+participantes_para_paredao = [p for p in nomes if p != lider and (p != imune if imune else True)]
+
+# Se houver menos de 3 participantes elegíveis para o paredão, elimina um aleatoriamente
+if len(participantes_para_paredao) < 3:
+    print("Não há participantes suficientes para formar um paredão de 3.")
+    if len(nomes) > 1:  # Garante que ainda há mais de um na casa
+        eliminado = random.choice(nomes)  # Escolhe alguém aleatoriamente da casa
+        print(f"Para que o jogo continue, o Big Boss decidiu eliminar aleatoriamente: {eliminado.upper()}!")
+        nomes.remove(eliminado)
+        print(f"Restam {len(nomes)} participantes na casa.\n")
+    round_number += 1
+else:
     # Sorteia 3 para o paredão
-    paredao = random.sample(nomes, 3)
+    paredao = random.sample(participantes_para_paredao, 3)
     print(f"Emparedados da semana: {paredao[0]}, {paredao[1]} e {paredao[2]}!\n")
 
-    # Dicionário para votos
+    # Inicializa votos
     votos = {participante: 0 for participante in paredao}
 
-    # Votação automática
-    total_votantes = len(nomes) - len(paredao)  # Não votam em si mesmos
+    # Quem pode votar: todos, menos os do paredão e quem perdeu o voto
+    votantes = [p for p in nomes if p not in paredao and (p != perde_voto if perde_voto else True)]
 
-    for _ in range(total_votantes):
-        voto = random.choice(paredao)
-        votos[voto] += 1
+    if not votantes:
+        print("Não há votantes nesta rodada. O jogo continua sem eliminação nesta semana.")
+        round_number += 1
+    else:
+        for _ in votantes:
+            voto = random.choice(paredao)
+            votos[voto] += 1
 
-    # Exibe resultado
-    print("RESULTADO DO PAREDÃO:\n")
-    for participante, num_votos in votos.items():
-        print(f"{participante}: {num_votos} votos")
+        # Mostra resultado da votação
+        print("Resultado da votação:")
+        for participante, num_votos in votos.items():
+            print(f"{participante}: {num_votos} votos")
+        
+        # Elimina o mais votado
+        eliminado = max(votos, key=votos.get)
+        print(f"\nO eliminado da semana é: {eliminado.upper()}!")
+        nomes.remove(eliminado)
+        print(f"Restam {len(nomes)} participantes na casa.\n")
 
-            # Dados para o gráfico
-    participantes = list(votos.keys())
-    quantidade_votos = list(votos.values())
+    round_number += 1
 
-    # Criando o gráfico de barras
-    plt.figure(figsize=(8, 6))
-    plt.bar(participantes, quantidade_votos, color=['red', 'blue', 'green'])
+# ----------- RESULTADO DO PAREDÃO COM GRÁFICO -----------
 
-    # Título e rótulos
-    plt.title('Resultado do Paredão - BBB')
-    plt.xlabel('Participantes')
-    plt.ylabel('Número de Votos')
+print("RESULTADO DO PAREDÃO:\n")
+participantes_para_paredao = [p for p in nomes if p != lider and (p != imune if imune else True)]
 
-    # Mostrar os valores no topo de cada barra
-    for i, v in enumerate(quantidade_votos):
-        plt.text(i, v + 0.5, str(v), ha='center', fontweight='bold')
+if len(participantes_para_paredao) >= 3:
+    paredao = random.sample(participantes_para_paredao, 3)
+else:
+    paredao = participantes_para_paredao  # ou outro tratamento
 
-    # Exibir o gráfico
-    plt.show()
+votos = {participante: 0 for participante in paredao}
+for participante, num_votos in votos.items():
+    print(f"{participante}: {num_votos} votos")
 
-    # Determina eliminado
-    eliminado = max(votos, key=votos.get)
+# Aqui, se quiser mostrar algo, use outra variável ou lógica
 
-    print(f"\n❌ O eliminado da semana é: {eliminado.upper()} com {votos[eliminado]} votos! ❌\n")
-    print("FIM DO JOGO! Até a próxima semana no BBB. 👀🔥")
-    nomes.remove(eliminado)
+# Gráfico
+participantes = list(votos.keys())
+quantidade_votos = list(votos.values())
+
+plt.figure(figsize=(8, 6))
+plt.bar(participantes, quantidade_votos, color=['red', 'blue', 'green'])
+
+plt.title('Resultado do Paredão - BBB')
+plt.xlabel('Participantes')
+plt.ylabel('Número de Votos')
+
+for i, v in enumerate(quantidade_votos):
+    plt.text(i, v + 0.5, str(v), ha='center', fontweight='bold')
+
+plt.show()
+
+# Determina eliminado
+eliminado = max(votos, key=votos.get)
+
+print(f"\n❌ O eliminado da semana é: {eliminado.upper()} com {votos[eliminado]} votos! ❌\n")
+
+# Remove eliminado da lista
+nomes.remove(eliminado)
+
+ # ----------- FINAL DO JOGO -----------
+if len(nomes) == 1:
+        vencedor = nomes[0]
+        print("\n--- FIM DE JOGO! ---")
+        print("\n🎉🎉🎉 PARABÉNS! 🎉🎉🎉")
+        print(f"O grande vencedor do BBB é: {vencedor.upper()}!")
+        print("Ele(a) superou todas as fofocas, paredões e provas para se tornar o(a) campeão(ã)!")
+        print("Obrigado por jogar o BBB do povão!")
+else: # Isso só aconteceria se, por algum motivo, a lista ficasse vazia, o que não deve ocorrer com a lógica atual
+        print("\n--- FIM DE JOGO ---")
+        print("Todos os participantes foram eliminados. Ninguém venceu esta edição do BBB.")
